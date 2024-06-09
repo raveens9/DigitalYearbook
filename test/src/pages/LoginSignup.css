@@ -1,0 +1,82 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 400px;
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  }
+
+.header {
+    margin-bottom: 30px;
+  }
+  
+  .text {
+    font-size: 40px;
+    font-weight: bold;
+  }
+  
+  .inputs {
+    width: 100%; /* Adjust as needed */
+    max-width: 400px; /* Adjust as needed */
+  }
+  
+  .input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .icon {
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
+  }
+  
+  .input-box {
+    height: 40px; /* Same height as the icon */
+    flex: 1;
+    padding: 0 10px; /* Optional: for better spacing inside the input */
+    box-sizing: border-box; /* Ensure padding is included in the total width and height */
+    border: 1px solid #ccc; /* Add a border for visual consistency */
+    border-radius: 4px; /* Optional: for rounded corners */
+  }
+  
+  .forgotPassword {
+    margin-top: 30px;
+  }
+
+  .forgotPassword span{
+    margin-top: 30px;
+    cursor: pointer;
+    color: blue;
+  }
+
+  .submit_container{
+    display: flex;
+    gap: 30px;
+    margin: 40px;
+  }
+
+  .submit{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 60px;
+    background: rgb(57, 57, 227);
+    border-radius: 50px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .gray{
+    background-color: gray;
+  }
