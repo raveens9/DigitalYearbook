@@ -4,7 +4,6 @@ from sqlalchemy import String, Text, Integer, Boolean, DateTime, JSON, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 
-
 class User(Base):
     __tablename__ = "users"
 
@@ -20,7 +19,13 @@ class User(Base):
     interests: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     socials: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
     profile_picture_url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    
+    # Existing active status (e.g. for email verification)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    
+    # [YOUR CONTRIBUTION] Admin Approval Switch (Default is FALSE so they are pending)
+    is_approved: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
