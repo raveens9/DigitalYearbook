@@ -123,7 +123,11 @@ export function Search() {
               {total} student{total !== 1 ? "s" : ""} found
             </p>
 
-            {results.length === 0 ? (
+            {isLoading && results.length === 0 ? (
+              <div className="bg-white rounded-lg shadow p-6 text-center">
+                <p className="text-gray-500">Searching...</p>
+              </div>
+            ) : results.length === 0 ? (
               <div className="bg-white rounded-lg shadow p-6 text-center">
                 <p className="text-gray-500">
                   No students found matching your criteria.

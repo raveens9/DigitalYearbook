@@ -155,3 +155,38 @@ export const reportsApi = {
       body: data,
     }),
 };
+
+// Upload endpoints
+export const uploadApi = {
+  uploadImage: async (
+    file: File,
+    imageType: "profile_picture" | "post_image" | "post_attachment",
+    postId?: number,
+  ) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("image_type", imageType);
+    if (postId) formData.append("post_id", postId.toString());
+
+    const token = localStorage.getItem("access_token");
+    const response = await fetch(
+      "https://digitalyearbook-production.up.railway.app/api/v1/image",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      },
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || "Upload failed");
+    }
+
+    return response.json();
+  },
+  deleteImage: (imageId: number) =>
+    apiClient.request(`/api/v1/image/${imageId}`, { method: "DELETE" }),
+};
