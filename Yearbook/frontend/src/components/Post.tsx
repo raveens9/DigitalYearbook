@@ -25,6 +25,11 @@ export function Post({
   const [reportReason, setReportReason] = useState("");
   const [currentPost, setCurrentPost] = useState(post);
 
+  // [YOUR CONTRIBUTION] Translation State
+  const [translatedText, setTranslatedText] = useState<string | null>(null);
+  const [translationLang, setTranslationLang] = useState<string>("");
+  const [isTranslating, setIsTranslating] = useState(false);
+
   const isOwner = user?.id === post.author.id;
 
   const handleLike = async () => {
@@ -86,6 +91,44 @@ export function Post({
       alert("Report submitted successfully");
     } catch (error) {
       console.error("Failed to report post:", error);
+    }
+  };
+
+  // [YOUR CONTRIBUTION] Translation Function
+  const handleTranslate = async (lang: string) => {
+    // If user clicks the same language again, toggle it off
+    if (translationLang === lang && translatedText) {
+      setTranslatedText(null);
+      setTranslationLang("");
+      return;
+    }
+
+    setIsTranslating(true);
+    try {
+      // Calling your new backend API
+      const response = await fetch("http://localhost:8000/api/v1/tools/translate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: currentPost.content,
+          target_lang: lang,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Translation failed");
+      }
+
+      const data = await response.json();
+      setTranslatedText(data.translated);
+      setTranslationLang(lang);
+    } catch (error) {
+      console.error("Translation error:", error);
+      alert("Translation failed. Ensure the backend is running.");
+    } finally {
+      setIsTranslating(false);
     }
   };
 
@@ -181,6 +224,57 @@ export function Post({
         >
           {currentPost.content}
         </p>
+      )}
+
+      {/* [YOUR CONTRIBUTION] Translation UI */}
+      {!isEditing && (
+        <div className="mb-4">
+          <div className="flex gap-3 text-xs text-gray-500 items-center">
+            <span>Translate to:</span>
+            <button
+              onClick={() => handleTranslate("si")}
+              className={`hover:text-indigo-600 transition-colors ${
+                translationLang === "si" ? "font-bold text-indigo-600" : ""
+              }`}
+              disabled={isTranslating}
+            >
+              Sinhala
+            </button>
+            <button
+              onClick={() => handleTranslate("ta")}
+              className={`hover:text-indigo-600 transition-colors ${
+                translationLang === "ta" ? "font-bold text-indigo-600" : ""
+              }`}
+              disabled={isTranslating}
+            >
+              Tamil
+            </button>
+            <button
+              onClick={() => handleTranslate("en")}
+              className={`hover:text-indigo-600 transition-colors ${
+                translationLang === "en" ? "font-bold text-indigo-600" : ""
+              }`}
+              disabled={isTranslating}
+            >
+              English
+            </button>
+            {isTranslating && <span className="animate-pulse">...</span>}
+          </div>
+
+          {translatedText && (
+            <div className="mt-2 p-3 bg-indigo-50 rounded-md border border-indigo-100 text-gray-700 text-sm">
+              <div className="text-xs font-semibold text-indigo-500 mb-1">
+                Translated to{" "}
+                {translationLang === "si"
+                  ? "Sinhala"
+                  : translationLang === "ta"
+                  ? "Tamil"
+                  : "English"}
+              </div>
+              {translatedText}
+            </div>
+          )}
+        </div>
       )}
 
       {/* Image */}
