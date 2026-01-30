@@ -21,6 +21,7 @@ async def register(data: RegisterRequest, db: AsyncSession = Depends(get_db)):
     """Register a new user account."""
     service = AuthService(db)
     try:
+        # Note: New users will have is_approved=False by default (from your model)
         user = await service.register(data)
         return user
     except ValueError as e:
@@ -36,11 +37,20 @@ async def login(data: LoginRequest, db: AsyncSession = Depends(get_db)):
     service = AuthService(db)
     user = await service.authenticate(data.email, data.password)
     
+    # 1. Check if password is wrong
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
             headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # 2. [YOUR SECURITY FEATURE] Check if Admin has approved them
+    # If is_approved is False (or None), we block them.
+    if not user.is_approved:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Your account is pending administrative approval. Please contact the faculty admin.",
         )
     
     access_token, refresh_token = await service.create_tokens(user)
