@@ -59,7 +59,7 @@ class UserService:
         self,
         query: Optional[str] = None,
         department: Optional[str] = None,
-        graduation_year: Optional[int] = None,
+        batch: Optional[int] = None,
         limit: int = 20,
         offset: int = 0,
     ) -> Tuple[List[User], int]:
@@ -76,12 +76,12 @@ class UserService:
             count_stmt = count_stmt.where(search_filter)
         
         if department:
-            stmt = stmt.where(User.faculty.ilike(f"%{department}%"))
-            count_stmt = count_stmt.where(User.faculty.ilike(f"%{department}%"))
+            stmt = stmt.where(User.department.ilike(f"%{department}%"))
+            count_stmt = count_stmt.where(User.department.ilike(f"%{department}%"))
         
-        if graduation_year:
-            stmt = stmt.where(User.graduation_year == graduation_year)
-            count_stmt = count_stmt.where(User.graduation_year == graduation_year)
+        if batch:
+            stmt = stmt.where(User.batch == batch)
+            count_stmt = count_stmt.where(User.batch == batch)
         
         # Get total count
         count_result = await self.db.execute(count_stmt)

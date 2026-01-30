@@ -8,8 +8,8 @@ export function Register() {
     password: "",
     confirmPassword: "",
     fullName: "",
-    university: "",
-    graduationYear: new Date().getFullYear() + 1,
+    department: "",
+    batch: 1,
     yearbookQuote: "",
   });
   const [error, setError] = useState("");
@@ -18,7 +18,9 @@ export function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -47,8 +49,8 @@ export function Register() {
         formData.email,
         formData.password,
         formData.fullName,
-        formData.university,
-        formData.graduationYear,
+        formData.department,
+        formData.batch,
         formData.yearbookQuote || undefined,
       );
       navigate("/login", {
@@ -65,7 +67,7 @@ export function Register() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h1 className="text-center text-4xl font-bold text-indigo-600">
+          <h1 className="text-center text-4xl font-bold text-orange-600">
             📚 Yearbook
           </h1>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -75,7 +77,7 @@ export function Register() {
             Already have an account?{" "}
             <Link
               to="/login"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
+              className="font-medium text-orange-600 hover:text-orange-500"
             >
               Sign in
             </Link>
@@ -104,7 +106,7 @@ export function Register() {
                 required
                 value={formData.fullName}
                 onChange={handleChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
                 placeholder="John Doe"
               />
             </div>
@@ -124,48 +126,69 @@ export function Register() {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
                 placeholder="john@university.edu"
               />
             </div>
 
             <div>
               <label
-                htmlFor="university"
+                htmlFor="department"
                 className="block text-sm font-medium text-gray-700"
               >
-                University
+                Department
               </label>
-              <input
-                id="university"
-                name="university"
-                type="text"
+              <select
+                id="department"
+                name="department"
                 required
-                value={formData.university}
+                value={formData.department}
                 onChange={handleChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                placeholder="Stanford University"
-              />
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+              >
+                <option value="">Select your department</option>
+                <option value="Computer Engineering">
+                  Computer Engineering
+                </option>
+                <option value="Electronic and Electrical Engineering">
+                  Electronic and Electrical Engineering
+                </option>
+                <option value="Mechanical Engineering">
+                  Mechanical Engineering
+                </option>
+                <option value="Civil Engineering">Civil Engineering</option>
+              </select>
             </div>
 
             <div>
               <label
-                htmlFor="graduationYear"
+                htmlFor="batch"
                 className="block text-sm font-medium text-gray-700"
               >
-                Graduation Year
+                Batch
               </label>
-              <input
-                id="graduationYear"
-                name="graduationYear"
-                type="number"
+              <select
+                id="batch"
+                name="batch"
                 required
-                min="1900"
-                max="2100"
-                value={formData.graduationYear}
+                value={formData.batch}
                 onChange={handleChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              />
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+              >
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((batchNum) => (
+                  <option key={batchNum} value={batchNum}>
+                    {batchNum}
+                    {batchNum === 1
+                      ? "st"
+                      : batchNum === 2
+                        ? "nd"
+                        : batchNum === 3
+                          ? "rd"
+                          : "th"}{" "}
+                    Batch
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
@@ -182,11 +205,12 @@ export function Register() {
                 value={formData.yearbookQuote}
                 onChange={handleChange}
                 maxLength={300}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
                 placeholder="Your memorable quote (can only be set once)"
               />
               <p className="mt-1 text-xs text-gray-500">
-                ⚠️ Choose carefully! This can only be set once and cannot be changed later.
+                ⚠️ Choose carefully! This can only be set once and cannot be
+                changed later.
               </p>
             </div>
 
@@ -204,7 +228,7 @@ export function Register() {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
                 placeholder="••••••••"
               />
             </div>
@@ -223,7 +247,7 @@ export function Register() {
                 required
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
                 placeholder="••••••••"
               />
             </div>
@@ -233,7 +257,7 @@ export function Register() {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-200 disabled:cursor-not-allowed"
             >
               {isLoading ? "Creating account..." : "Create account"}
             </button>

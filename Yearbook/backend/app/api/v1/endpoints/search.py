@@ -14,7 +14,7 @@ router = APIRouter(prefix="/search", tags=["Search"])
 async def search_students(
     q: Optional[str] = Query(None, description="Search query for name/username"),
     department: Optional[str] = Query(None, description="Filter by department/faculty"),
-    graduation_year: Optional[int] = Query(None, ge=1900, le=2100, description="Filter by graduation year"),
+    batch: Optional[int] = Query(None, ge=1, le=9, description="Filter by batch number"),
     limit: int = Query(20, ge=1, le=100),
     offset: int = Query(0, ge=0),
     db: AsyncSession = Depends(get_db),
@@ -28,7 +28,7 @@ async def search_students(
     users, total = await service.search(
         query=q,
         department=department,
-        graduation_year=graduation_year,
+        batch=batch,
         limit=limit,
         offset=offset,
     )

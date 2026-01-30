@@ -158,14 +158,14 @@ export function Post({
               className="w-10 h-10 rounded-full object-cover"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
-              <span className="text-indigo-600 font-medium">
+            <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+              <span className="text-orange-600 font-medium">
                 {post.author.full_name.charAt(0).toUpperCase()}
               </span>
             </div>
           )}
           <div>
-            <p className="font-medium text-gray-900 hover:text-indigo-600">
+            <p className="font-medium text-gray-900 hover:text-orange-600">
               {post.author.full_name}
             </p>
             <p className="text-sm text-gray-500">@{post.author.username}</p>
@@ -200,7 +200,7 @@ export function Post({
           <textarea
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
-            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             rows={3}
           />
           <div className="flex justify-end space-x-2 mt-2">
@@ -212,7 +212,7 @@ export function Post({
             </button>
             <button
               onClick={handleEdit}
-              className="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700"
+              className="px-3 py-1 text-sm bg-orange-600 text-white rounded hover:bg-orange-700"
             >
               Save
             </button>
@@ -233,8 +233,8 @@ export function Post({
             <span>Translate to:</span>
             <button
               onClick={() => handleTranslate("si")}
-              className={`hover:text-indigo-600 transition-colors ${
-                translationLang === "si" ? "font-bold text-indigo-600" : ""
+              className={`hover:text-orange-600 transition-colors ${
+                translationLang === "si" ? "font-bold text-orange-600" : ""
               }`}
               disabled={isTranslating}
             >
@@ -242,8 +242,8 @@ export function Post({
             </button>
             <button
               onClick={() => handleTranslate("ta")}
-              className={`hover:text-indigo-600 transition-colors ${
-                translationLang === "ta" ? "font-bold text-indigo-600" : ""
+              className={`hover:text-orange-600 transition-colors ${
+                translationLang === "ta" ? "font-bold text-orange-600" : ""
               }`}
               disabled={isTranslating}
             >
@@ -251,8 +251,8 @@ export function Post({
             </button>
             <button
               onClick={() => handleTranslate("en")}
-              className={`hover:text-indigo-600 transition-colors ${
-                translationLang === "en" ? "font-bold text-indigo-600" : ""
+              className={`hover:text-orange-600 transition-colors ${
+                translationLang === "en" ? "font-bold text-orange-600" : ""
               }`}
               disabled={isTranslating}
             >
@@ -262,8 +262,8 @@ export function Post({
           </div>
 
           {translatedText && (
-            <div className="mt-2 p-3 bg-indigo-50 rounded-md border border-indigo-100 text-gray-700 text-sm">
-              <div className="text-xs font-semibold text-indigo-500 mb-1">
+            <div className="mt-2 p-3 bg-orange-50 rounded-md border border-orange-100 text-gray-700 text-sm">
+              <div className="text-xs font-semibold text-orange-500 mb-1">
                 Translated to{" "}
                 {translationLang === "si"
                   ? "Sinhala"
@@ -303,7 +303,7 @@ export function Post({
           </button>
           <Link
             to={`/post/${post.id}`}
-            className="flex items-center space-x-1 text-gray-500 hover:text-indigo-600"
+            className="flex items-center space-x-1 text-gray-500 hover:text-orange-600"
           >
             <span>💬</span>
             <span>{currentPost.comments_count}</span>
@@ -328,7 +328,7 @@ export function Post({
               value={reportReason}
               onChange={(e) => setReportReason(e.target.value)}
               placeholder="Please describe why you're reporting this post..."
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               rows={4}
             />
             <div className="flex justify-end space-x-2 mt-4">

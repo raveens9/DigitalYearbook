@@ -6,8 +6,8 @@ from datetime import datetime
 class UserBase(BaseModel):
     email: EmailStr
     full_name: str = Field(..., min_length=1, max_length=100)
-    university: str = Field(..., min_length=1, max_length=200)
-    graduation_year: int = Field(..., ge=1900, le=2100)
+    department: str = Field(..., min_length=1, max_length=200)
+    batch: int = Field(..., ge=1, le=9)
 
 
 class UserCreate(UserBase):
@@ -39,8 +39,8 @@ class UserResponse(BaseModel):
     email: EmailStr
     username: str
     full_name: str
-    university: str
-    graduation_year: int
+    department: str
+    batch: int
     bio: Optional[str] = None
     faculty: Optional[str] = None
     interests: Optional[str] = None
@@ -60,8 +60,8 @@ class UserPublicResponse(BaseModel):
     id: int
     username: str
     full_name: str
-    university: str
-    graduation_year: int
+    department: str
+    batch: int
     bio: Optional[str] = None
     faculty: Optional[str] = None
     interests: Optional[str] = None
@@ -78,8 +78,8 @@ class UserSearchResult(BaseModel):
     id: int
     username: str
     full_name: str
-    university: str
-    graduation_year: int
+    department: str
+    batch: int
     faculty: Optional[str] = None
     profile_picture_url: Optional[str] = None
     yearbook_quote: Optional[str] = None

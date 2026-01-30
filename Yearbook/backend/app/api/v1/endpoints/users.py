@@ -38,18 +38,18 @@ async def update_my_profile(
 async def search_users(
     q: Optional[str] = Query(None, description="Search query for name/username"),
     department: Optional[str] = Query(None, description="Filter by department/faculty"),
-    graduation_year: Optional[int] = Query(None, ge=1900, le=2100, description="Filter by graduation year"),
+    batch: Optional[int] = Query(None, ge=1, le=9, description="Filter by batch number"),
     limit: int = Query(20, ge=1, le=100),
     offset: int = Query(0, ge=0),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Search users by name, department, or graduation year."""
+    """Search users by name, department, or batch."""
     service = UserService(db)
     users, total = await service.search(
         query=q,
         department=department,
-        graduation_year=graduation_year,
+        batch=batch,
         limit=limit,
         offset=offset,
     )

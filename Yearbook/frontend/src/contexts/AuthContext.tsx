@@ -18,8 +18,8 @@ interface AuthContextType {
     email: string,
     password: string,
     fullName: string,
-    university: string,
-    graduationYear: number,
+    department: string,
+    batch: number,
     yearbookQuote?: string,
   ) => Promise<void>;
   logout: () => Promise<void>;
@@ -62,16 +62,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     email: string,
     password: string,
     fullName: string,
-    university: string,
-    graduationYear: number,
+    department: string,
+    batch: number,
     yearbookQuote?: string,
   ) => {
-    await authApi.register(
+    const data = await authApi.register(
       email,
       password,
       fullName,
-      university,
-      graduationYear,
+      department,
+      batch,
       yearbookQuote,
     );
   };

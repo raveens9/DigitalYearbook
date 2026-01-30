@@ -18,27 +18,21 @@ export function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <span className="text-xl font-bold text-indigo-600 dark:text-indigo-400">
+              <span className="text-xl font-bold text-orange-600 dark:text-orange-400">
                 📚 Yearbook
               </span>
             </Link>
             {isAuthenticated && (
               <div className="hidden sm:ml-8 sm:flex sm:space-x-4">
                 <Link
-                  to="/feed"
-                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-700"
-                >
-                  Feed
-                </Link>
-                <Link
                   to="/graduation"
-                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   Graduates
                 </Link>
                 <Link
                   to="/search"
-                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   Search
                 </Link>
@@ -80,7 +74,7 @@ export function Navbar() {
               <>
                 <Link
                   to="/profile"
-                  className="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400"
+                  className="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400"
                 >
                   {user?.profile_picture_url ? (
                     <img
@@ -89,8 +83,8 @@ export function Navbar() {
                       className="w-8 h-8 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
-                      <span className="text-indigo-600 dark:text-indigo-400 font-medium">
+                    <div className="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center">
+                      <span className="text-orange-600 dark:text-orange-400 font-medium">
                         {user?.full_name?.charAt(0).toUpperCase()}
                       </span>
                     </div>
@@ -108,13 +102,13 @@ export function Navbar() {
               <>
                 <Link
                   to="/login"
-                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400"
+                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400"
                 >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="px-4 py-2 rounded-md text-sm font-medium text-white bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600"
+                  className="px-4 py-2 rounded-md text-sm font-medium text-white bg-orange-600 dark:bg-orange-500 hover:bg-orange-700 dark:hover:bg-orange-600"
                 >
                   Sign Up
                 </Link>

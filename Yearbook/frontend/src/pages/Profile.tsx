@@ -3,6 +3,7 @@ import { Layout } from "../components/Layout";
 import { useAuth } from "../contexts/AuthContext";
 import { usersApi, uploadApi } from "../api/endpoints";
 import type { UserUpdate } from "../types";
+import buildingImage from "../assets/FOE-Mattegoda-1.jpg";
 
 export function Profile() {
   const { user, refreshUser } = useAuth();
@@ -17,7 +18,7 @@ export function Profile() {
     full_name: user?.full_name || "",
     username: user?.username || "",
     bio: user?.bio || "",
-    faculty: user?.faculty || "",
+    department: user?.department || "",
     interests: user?.interests || "",
     profile_picture_url: user?.profile_picture_url || "",
     socials: user?.socials || {},
@@ -95,10 +96,16 @@ export function Profile() {
 
   return (
     <Layout>
+      <div
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none"
+        style={{
+          backgroundImage: `url('${buildingImage}')`,
+        }}
+      />
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white/95 rounded-lg shadow overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-indigo-500 to-purple-600 h-32"></div>
+          <div className="bg-gradient-to-r from-orange-500 to-orange-600 h-32"></div>
 
           {/* Profile Info */}
           <div className="relative px-6 pb-6">
@@ -110,8 +117,8 @@ export function Profile() {
                   className="w-32 h-32 rounded-full border-4 border-white object-cover"
                 />
               ) : (
-                <div className="w-32 h-32 rounded-full border-4 border-white bg-indigo-100 flex items-center justify-center">
-                  <span className="text-4xl text-indigo-600 font-bold">
+                <div className="w-32 h-32 rounded-full border-4 border-white bg-orange-100 flex items-center justify-center">
+                  <span className="text-4xl text-orange-600 font-bold">
                     {user.full_name.charAt(0).toUpperCase()}
                   </span>
                 </div>
@@ -119,7 +126,7 @@ export function Profile() {
               <div className="ml-auto mt-16">
                 <button
                   onClick={() => setIsEditing(!isEditing)}
-                  className="px-4 py-2 text-sm font-medium text-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-50"
+                  className="px-4 py-2 text-sm font-medium text-orange-600 border border-orange-600 rounded-lg hover:bg-orange-50"
                 >
                   {isEditing ? "Cancel" : "Edit Profile"}
                 </button>
@@ -146,7 +153,7 @@ export function Profile() {
                     <img
                       src={formData.profile_picture_url}
                       alt="Profile preview"
-                      className="w-32 h-32 rounded-full object-cover border-4 border-indigo-200"
+                      className="w-32 h-32 rounded-full object-cover border-4 border-orange-200"
                     />
                   </div>
                 )}
@@ -161,7 +168,7 @@ export function Profile() {
                       name="full_name"
                       value={formData.full_name}
                       onChange={handleChange}
-                      className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                      className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
                     />
                   </div>
                   <div>
@@ -173,7 +180,7 @@ export function Profile() {
                       name="username"
                       value={formData.username}
                       onChange={handleChange}
-                      className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                      className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
                     />
                   </div>
                 </div>
@@ -187,22 +194,35 @@ export function Profile() {
                     value={formData.bio}
                     onChange={handleChange}
                     rows={3}
-                    className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Faculty/Department
+                      Department
                     </label>
-                    <input
-                      type="text"
-                      name="faculty"
-                      value={formData.faculty}
+                    <select
+                      name="department"
+                      value={formData.department}
                       onChange={handleChange}
-                      className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
-                    />
+                      className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
+                    >
+                      <option value="">Select Department</option>
+                      <option value="Computer Engineering">
+                        Computer Engineering
+                      </option>
+                      <option value="Electronic and Electrical Engineering">
+                        Electronic and Electrical Engineering
+                      </option>
+                      <option value="Mechanical Engineering">
+                        Mechanical Engineering
+                      </option>
+                      <option value="Civil Engineering">
+                        Civil Engineering
+                      </option>
+                    </select>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
@@ -264,7 +284,7 @@ export function Profile() {
                     value={formData.interests}
                     onChange={handleChange}
                     placeholder="e.g., Photography, Music, Sports"
-                    className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
                   />
                 </div>
 
@@ -296,11 +316,11 @@ export function Profile() {
                         onChange={handleChange}
                         placeholder="Your memorable yearbook quote..."
                         maxLength={300}
-                        className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
                       />
                       <p className="text-xs text-gray-500 mt-1">
-                        ⚠️ Choose carefully! This can only be set once and cannot be
-                        changed later.
+                        ⚠️ Choose carefully! This can only be set once and
+                        cannot be changed later.
                       </p>
                     </>
                   )}
@@ -324,7 +344,7 @@ export function Profile() {
                               handleSocialChange(platform, e.target.value)
                             }
                             placeholder={`https://${platform}.com/...`}
-                            className="flex-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm"
+                            className="flex-1 p-2 border rounded-lg focus:ring-2 focus:ring-orange-500 text-sm"
                           />
                         </div>
                       ),
@@ -336,7 +356,7 @@ export function Profile() {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+                    className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-200"
                   >
                     {isLoading ? "Saving..." : "Save Changes"}
                   </button>
@@ -354,7 +374,7 @@ export function Profile() {
                 {user.bio && <p className="text-gray-700">{user.bio}</p>}
 
                 {user.yearbook_quote && (
-                  <div className="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded">
+                  <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded">
                     <p className="text-gray-700 italic text-lg">
                       "{user.yearbook_quote}"
                     </p>
@@ -365,18 +385,20 @@ export function Profile() {
                 <div className="flex flex-wrap gap-4 text-sm">
                   <div className="flex items-center text-gray-600">
                     <span className="mr-1">🎓</span>
-                    {user.university}
+                    {user.department}
                   </div>
                   <div className="flex items-center text-gray-600">
                     <span className="mr-1">📅</span>
-                    Class of {user.graduation_year}
+                    {user.batch}
+                    {user.batch === 1
+                      ? "st"
+                      : user.batch === 2
+                        ? "nd"
+                        : user.batch === 3
+                          ? "rd"
+                          : "th"}{" "}
+                    Batch
                   </div>
-                  {user.faculty && (
-                    <div className="flex items-center text-gray-600">
-                      <span className="mr-1">🏛️</span>
-                      {user.faculty}
-                    </div>
-                  )}
                 </div>
 
                 {user.interests && (
@@ -402,7 +424,7 @@ export function Profile() {
                               href={url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-indigo-600 hover:text-indigo-800 capitalize"
+                              className="text-orange-600 hover:text-orange-800 capitalize"
                             >
                               {platform}
                             </a>

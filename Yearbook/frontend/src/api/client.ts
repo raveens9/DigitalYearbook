@@ -133,8 +133,8 @@ class APIClient {
     email: string,
     password: string,
     fullName: string,
-    university: string,
-    graduationYear: number,
+    department: string,
+    batch: number,
     yearbookQuote?: string,
   ): Promise<void> {
     await this.request("/api/v1/auth/register", {
@@ -143,8 +143,8 @@ class APIClient {
         email,
         password,
         full_name: fullName,
-        university,
-        graduation_year: graduationYear,
+        department,
+        batch,
         yearbook_quote: yearbookQuote || undefined,
       },
       requireAuth: false,

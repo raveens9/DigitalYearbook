@@ -58,8 +58,8 @@ class AuthService:
             username=username,
             password_hash=get_password_hash(data.password),
             full_name=data.full_name,
-            university=data.university,
-            graduation_year=data.graduation_year,
+            department=data.department,
+            batch=data.batch,
             yearbook_quote=data.yearbook_quote,
             # If university mail -> True. If Gmail -> False.
             is_approved=is_auto_approved

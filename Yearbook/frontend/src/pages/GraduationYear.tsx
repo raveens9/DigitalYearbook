@@ -3,25 +3,36 @@ import { Link } from "react-router-dom";
 import { Layout } from "../components/Layout";
 import { usersApi } from "../api/endpoints";
 import type { UserSearchResult } from "../types";
+import { useAuth } from "../contexts/AuthContext";
+import buildingImage from "../assets/FOE-Mattegoda-1.jpg";
 
 export function GraduationYear() {
-  const currentYear = new Date().getFullYear();
-  const [selectedYear, setSelectedYear] = useState(currentYear);
+  const { user } = useAuth();
+  const [selectedBatch, setSelectedBatch] = useState(user?.batch || 1);
+  const [selectedDepartment, setSelectedDepartment] = useState("");
   const [students, setStudents] = useState<UserSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
   const limit = 24; // Display 24 students per load (4x6 grid)
 
-  // Generate year options (from 1980 to current year + 10)
-  const yearOptions = Array.from(
-    { length: currentYear + 10 - 1980 + 1 },
-    (_, i) => currentYear + 10 - i,
-  );
+  const departments = [
+    "Computer Engineering",
+    "Electronic and Electrical Engineering",
+    "Mechanical Engineering",
+    "Civil Engineering",
+  ];
+
+  // Update selected batch when user data loads
+  useEffect(() => {
+    if (user?.batch) {
+      setSelectedBatch(user.batch);
+    }
+  }, [user?.batch]);
 
   useEffect(() => {
     loadStudents(true);
-  }, [selectedYear]);
+  }, [selectedBatch, selectedDepartment]);
 
   const loadStudents = async (reset = false) => {
     setIsLoading(true);
@@ -29,7 +40,8 @@ export function GraduationYear() {
 
     try {
       const response = await usersApi.search({
-        graduation_year: selectedYear,
+        batch: selectedBatch,
+        department: selectedDepartment || undefined,
         limit,
         offset: currentOffset,
       });
@@ -54,33 +66,72 @@ export function GraduationYear() {
 
   return (
     <Layout>
+      <div
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none"
+        style={{
+          backgroundImage: `url('${buildingImage}')`,
+        }}
+      />
       <div className="max-w-7xl mx-auto">
         {/* Header and Filter */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Students by Graduation Year
+            Students by Batch
           </h1>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center space-x-4">
-              <label
-                htmlFor="graduation-year"
-                className="text-lg font-medium text-gray-700"
-              >
-                Select Year:
-              </label>
-              <select
-                id="graduation-year"
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                className="px-4 py-2 text-lg border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              >
-                {yearOptions.map((year) => (
-                  <option key={year} value={year}>
-                    Class of {year}
-                  </option>
-                ))}
-              </select>
+          <div className="bg-white/95 rounded-lg shadow p-6">
+            <div className="flex flex-wrap gap-4">
+              <div className="flex items-center space-x-4">
+                <label
+                  htmlFor="batch"
+                  className="text-lg font-medium text-gray-700 whitespace-nowrap"
+                >
+                  Batch:
+                </label>
+                <select
+                  id="batch"
+                  value={selectedBatch}
+                  onChange={(e) => setSelectedBatch(parseInt(e.target.value))}
+                  className="px-4 py-2 text-lg border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((batchNum) => (
+                    <option key={batchNum} value={batchNum}>
+                      {batchNum}
+                      {batchNum === 1
+                        ? "st"
+                        : batchNum === 2
+                          ? "nd"
+                          : batchNum === 3
+                            ? "rd"
+                            : "th"}{" "}
+                      Batch
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex items-center space-x-4">
+                <label
+                  htmlFor="department"
+                  className="text-lg font-medium text-gray-700 whitespace-nowrap"
+                >
+                  Department:
+                </label>
+                <select
+                  id="department"
+                  value={selectedDepartment}
+                  onChange={(e) => setSelectedDepartment(e.target.value)}
+                  className="px-4 py-2 text-lg border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent min-w-[300px]"
+                >
+                  <option value="">All Departments</option>
+                  {departments.map((dept) => (
+                    <option key={dept} value={dept}>
+                      {dept}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <span className="text-gray-600">
                 ({total} student{total !== 1 ? "s" : ""})
               </span>
@@ -90,12 +141,12 @@ export function GraduationYear() {
 
         {/* Students Grid */}
         {isLoading && students.length === 0 ? (
-          <div className="bg-white rounded-lg shadow p-12 text-center">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+          <div className="bg-white/95 rounded-lg shadow p-12 text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
             <p className="text-gray-500 mt-4">Loading students...</p>
           </div>
         ) : students.length === 0 ? (
-          <div className="bg-white rounded-lg shadow p-12 text-center">
+          <div className="bg-white/95 rounded-lg shadow p-12 text-center">
             <svg
               className="mx-auto h-12 w-12 text-gray-400"
               fill="none"
@@ -110,7 +161,15 @@ export function GraduationYear() {
               />
             </svg>
             <p className="text-gray-500 mt-4 text-lg">
-              No students found graduating in {selectedYear}.
+              No students found in {selectedBatch}
+              {selectedBatch === 1
+                ? "st"
+                : selectedBatch === 2
+                  ? "nd"
+                  : selectedBatch === 3
+                    ? "rd"
+                    : "th"}{" "}
+              batch.
             </p>
           </div>
         ) : (
@@ -120,10 +179,10 @@ export function GraduationYear() {
                 <Link
                   key={student.id}
                   to={`/user/${student.id}`}
-                  className="bg-white rounded-lg shadow hover:shadow-xl transition-shadow duration-200 overflow-hidden group"
+                  className="bg-white/95 rounded-lg shadow hover:shadow-xl transition-shadow duration-200 overflow-hidden group"
                 >
                   {/* Profile Picture */}
-                  <div className="aspect-square bg-gradient-to-br from-indigo-500 to-purple-600 relative overflow-hidden">
+                  <div className="aspect-square bg-gradient-to-br from-orange-500 to-orange-600 relative overflow-hidden">
                     {student.profile_picture_url ? (
                       <img
                         src={student.profile_picture_url}
@@ -152,7 +211,7 @@ export function GraduationYear() {
                       @{student.username}
                     </p>
                     {student.yearbook_quote && (
-                      <div className="mb-2 p-2 bg-indigo-50 rounded border-l-2 border-indigo-400">
+                      <div className="mb-2 p-2 bg-orange-50 rounded border-l-2 border-orange-400">
                         <p className="text-xs text-gray-700 italic line-clamp-2">
                           "{student.yearbook_quote}"
                         </p>
@@ -163,8 +222,8 @@ export function GraduationYear() {
                         {student.faculty}
                       </p>
                     )}
-                    <p className="text-xs text-indigo-600 font-medium mt-2">
-                      {student.university}
+                    <p className="text-xs text-orange-600 font-medium mt-2">
+                      {student.department}
                     </p>
                   </div>
                 </Link>
@@ -177,7 +236,7 @@ export function GraduationYear() {
                 <button
                   onClick={handleLoadMore}
                   disabled={isLoading}
-                  className="px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-8 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-200 disabled:cursor-not-allowed transition-colors"
                 >
                   {isLoading ? (
                     <span className="flex items-center">

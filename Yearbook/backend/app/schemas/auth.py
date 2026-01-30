@@ -22,8 +22,8 @@ class RegisterRequest(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=6, max_length=128)
     full_name: str = Field(..., min_length=1, max_length=100)
-    university: str = Field(..., min_length=1, max_length=200)
-    graduation_year: int = Field(..., ge=1900, le=2100)
+    department: str = Field(..., min_length=1, max_length=200)
+    batch: int = Field(..., ge=1, le=9)
     yearbook_quote: Optional[str] = Field(None, max_length=300)
 
 

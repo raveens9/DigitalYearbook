@@ -76,8 +76,8 @@ export function Comment({ comment, onDelete }: CommentProps) {
             className="w-8 h-8 rounded-full object-cover"
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center">
-            <span className="text-indigo-600 text-sm font-medium">
+          <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center">
+            <span className="text-orange-600 text-sm font-medium">
               {comment.author.full_name.charAt(0).toUpperCase()}
             </span>
           </div>
@@ -88,7 +88,7 @@ export function Comment({ comment, onDelete }: CommentProps) {
           <div className="flex items-center space-x-2">
             <Link
               to={`/user/${comment.author.id}`}
-              className="font-medium text-gray-900 hover:text-indigo-600 text-sm"
+              className="font-medium text-gray-900 hover:text-orange-600 text-sm"
             >
               {comment.author.full_name}
             </Link>
@@ -128,7 +128,7 @@ export function Comment({ comment, onDelete }: CommentProps) {
             <textarea
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}
-              className="w-full p-2 text-sm border rounded focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full p-2 text-sm border rounded focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               rows={2}
             />
             <div className="flex justify-end space-x-2 mt-1">
@@ -140,7 +140,7 @@ export function Comment({ comment, onDelete }: CommentProps) {
               </button>
               <button
                 onClick={handleEdit}
-                className="px-2 py-1 text-xs bg-indigo-600 text-white rounded hover:bg-indigo-700"
+                className="px-2 py-1 text-xs bg-orange-600 text-white rounded hover:bg-orange-700"
               >
                 Save
               </button>
@@ -160,7 +160,7 @@ export function Comment({ comment, onDelete }: CommentProps) {
               value={reportReason}
               onChange={(e) => setReportReason(e.target.value)}
               placeholder="Please describe why you're reporting this comment..."
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               rows={4}
             />
             <div className="flex justify-end space-x-2 mt-4">

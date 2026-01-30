@@ -4,7 +4,7 @@ export interface User {
   email: string;
   username: string;
   full_name: string;
-  university: string;
+  department: string;
   graduation_year: number;
   bio?: string;
   faculty?: string;
@@ -21,7 +21,7 @@ export interface UserPublic {
   id: number;
   username: string;
   full_name: string;
-  university: string;
+  department: string;
   graduation_year: number;
   bio?: string;
   faculty?: string;
@@ -36,8 +36,8 @@ export interface UserSearchResult {
   id: number;
   username: string;
   full_name: string;
-  university: string;
-  graduation_year: number;
+  department: string;
+  batch: number;
   faculty?: string;
   profile_picture_url?: string;
   yearbook_quote?: string;
@@ -70,8 +70,8 @@ export interface RegisterRequest {
   email: string;
   password: string;
   full_name: string;
-  university: string;
-  graduation_year: number;
+  department: string;
+  batch: number;
   yearbook_quote?: string;
 }
 

@@ -26,13 +26,13 @@ export function Welcome() {
             <div className="flex justify-center mb-8">
               <div className="relative">
                 <span className="text-8xl">📚</span>
-                <div className="absolute -inset-4 bg-indigo-500/20 dark:bg-indigo-400/20 rounded-full blur-xl animate-pulse"></div>
+                <div className="absolute -inset-4 bg-orange-500/20 dark:bg-orange-400/20 rounded-full blur-xl animate-pulse"></div>
               </div>
             </div>
 
             <h1 className="text-6xl font-bold text-white mb-6">
               Welcome to{" "}
-              <span className="bg-gradient-to-r from-indigo-300 to-purple-300 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-orange-300 to-orange-300 dark:from-orange-400 dark:to-orange-400 bg-clip-text text-transparent">
                 Digital Yearbook
               </span>
             </h1>
@@ -46,7 +46,7 @@ export function Welcome() {
               <div className="flex justify-center gap-4">
                 <Link
                   to="/register"
-                  className="px-8 py-4 bg-white text-indigo-600 rounded-lg hover:bg-gray-100 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="px-8 py-4 bg-white text-orange-600 rounded-lg hover:bg-gray-100 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   Get Started
                 </Link>
@@ -59,10 +59,10 @@ export function Welcome() {
               </div>
             ) : (
               <Link
-                to="/feed"
-                className="inline-block px-8 py-4 bg-white text-indigo-600 rounded-lg hover:bg-gray-100 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+                to="/graduation"
+                className="inline-block px-8 py-4 bg-white text-orange-600 rounded-lg hover:bg-gray-100 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
               >
-                Go to Feed
+                Find you peers!
               </Link>
             )}
           </div>
@@ -108,18 +108,14 @@ export function Welcome() {
             <h2 className="text-3xl font-bold text-white mb-12">
               Join Our Growing Community
             </h2>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 gap-8">
               <div className="p-6">
-                <div className="text-5xl font-bold text-white mb-2">10K+</div>
+                <div className="text-5xl font-bold text-white mb-2">600+</div>
                 <div className="text-gray-200 font-medium">Active Students</div>
               </div>
               <div className="p-6">
-                <div className="text-5xl font-bold text-white mb-2">50+</div>
-                <div className="text-gray-200 font-medium">Universities</div>
-              </div>
-              <div className="p-6">
-                <div className="text-5xl font-bold text-white mb-2">100K+</div>
-                <div className="text-gray-200 font-medium">Memories Shared</div>
+                <div className="text-5xl font-bold text-white mb-2">4</div>
+                <div className="text-gray-200 font-medium">Faculties</div>
               </div>
             </div>
           </div>
