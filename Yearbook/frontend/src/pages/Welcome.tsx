@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Navbar } from "../components/Navbar";
+import buildingImage from "../assets/FOE-Mattegoda-1.jpg";
 
 export function Welcome() {
   const { isAuthenticated } = useAuth();
@@ -11,7 +12,7 @@ export function Welcome() {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2940')`,
+          backgroundImage: `url('${buildingImage}')`,
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/90 via-purple-900/85 to-indigo-800/90 dark:from-gray-900/95 dark:via-indigo-950/90 dark:to-gray-900/95 transition-colors duration-300"></div>
