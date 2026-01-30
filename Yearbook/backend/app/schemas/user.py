@@ -22,6 +22,7 @@ class UserUpdate(BaseModel):
     interests: Optional[str] = Field(None, max_length=500)
     socials: Optional[Dict[str, str]] = None
     profile_picture_url: Optional[str] = Field(None, max_length=500)
+    yearbook_quote: Optional[str] = Field(None, max_length=300)
     
     @field_validator('username')
     @classmethod
@@ -45,6 +46,7 @@ class UserResponse(BaseModel):
     interests: Optional[str] = None
     socials: Optional[Dict[str, Any]] = None
     profile_picture_url: Optional[str] = None
+    yearbook_quote: Optional[str] = None
     is_active: bool
     created_at: datetime
     updated_at: datetime
@@ -65,6 +67,7 @@ class UserPublicResponse(BaseModel):
     interests: Optional[str] = None
     socials: Optional[Dict[str, Any]] = None
     profile_picture_url: Optional[str] = None
+    yearbook_quote: Optional[str] = None
     created_at: datetime
 
     class Config:
@@ -79,6 +82,7 @@ class UserSearchResult(BaseModel):
     graduation_year: int
     faculty: Optional[str] = None
     profile_picture_url: Optional[str] = None
+    yearbook_quote: Optional[str] = None
 
     class Config:
         from_attributes = True

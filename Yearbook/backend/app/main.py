@@ -23,7 +23,7 @@ async def lifespan(app: FastAPI):
     from app.db.base import Base
     from app.db.session import engine
     # Import all models to register them with Base
-    from app.models import User, Post, Comment, Like, Report, RefreshToken
+    from app.models import User, Post, Comment, Like, Report, RefreshToken, Image
     
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
@@ -57,6 +57,7 @@ def create_application() -> FastAPI:
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
+        expose_headers=["*"],
     )
     
     # Include API router

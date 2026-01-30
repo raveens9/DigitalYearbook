@@ -20,6 +20,7 @@ interface AuthContextType {
     fullName: string,
     university: string,
     graduationYear: number,
+    yearbookQuote?: string,
   ) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
@@ -63,6 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     fullName: string,
     university: string,
     graduationYear: number,
+    yearbookQuote?: string,
   ) => {
     await authApi.register(
       email,
@@ -70,6 +72,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       fullName,
       university,
       graduationYear,
+      yearbookQuote,
     );
   };
 

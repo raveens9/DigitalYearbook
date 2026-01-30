@@ -41,6 +41,12 @@ class UserService:
             if existing and existing.id != user.id:
                 raise ValueError("Username already taken")
         
+        # Prevent editing yearbook_quote if it's already set
+        if "yearbook_quote" in update_data:
+            if user.yearbook_quote is not None and user.yearbook_quote != "":
+                # Remove yearbook_quote from update_data if it's already set
+                update_data.pop("yearbook_quote")
+        
         for field, value in update_data.items():
             setattr(user, field, value)
         

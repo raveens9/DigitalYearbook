@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Layout } from "../components/Layout";
 import { useAuth } from "../contexts/AuthContext";
-import { usersApi } from "../api/endpoints";
+import { usersApi, uploadApi } from "../api/endpoints";
 import type { UserUpdate } from "../types";
 
 export function Profile() {
@@ -10,6 +10,8 @@ export function Profile() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState("");
 
   const [formData, setFormData] = useState<UserUpdate>({
     full_name: user?.full_name || "",
@@ -19,6 +21,7 @@ export function Profile() {
     interests: user?.interests || "",
     profile_picture_url: user?.profile_picture_url || "",
     socials: user?.socials || {},
+    yearbook_quote: user?.yearbook_quote || "",
   });
 
   const handleChange = (
@@ -33,6 +36,41 @@ export function Profile() {
       ...prev,
       socials: { ...prev.socials, [platform]: value },
     }));
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      setError("Please select an image file");
+      return;
+    }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      setError("Image size must be less than 10MB");
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadProgress("Uploading image...");
+    setError("");
+
+    try {
+      const response = await uploadApi.uploadImage(file, "profile_picture");
+      setFormData((prev) => ({
+        ...prev,
+        profile_picture_url: response.public_url,
+      }));
+      setUploadProgress("Upload successful!");
+      setTimeout(() => setUploadProgress(""), 2000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to upload image");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -102,6 +140,17 @@ export function Profile() {
 
             {isEditing ? (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Profile Picture Preview */}
+                {formData.profile_picture_url && (
+                  <div className="flex justify-center mb-4">
+                    <img
+                      src={formData.profile_picture_url}
+                      alt="Profile preview"
+                      className="w-32 h-32 rounded-full object-cover border-4 border-indigo-200"
+                    />
+                  </div>
+                )}
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
@@ -157,15 +206,51 @@ export function Profile() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Profile Picture URL
+                      Profile Picture
                     </label>
-                    <input
-                      type="url"
-                      name="profile_picture_url"
-                      value={formData.profile_picture_url}
-                      onChange={handleChange}
-                      className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
-                    />
+                    <div className="mt-1">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        disabled={isUploading}
+                        className="hidden"
+                        id="profile-picture-upload"
+                      />
+                      <label
+                        htmlFor="profile-picture-upload"
+                        className={`inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium cursor-pointer ${
+                          isUploading
+                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                            : "bg-white text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        <svg
+                          className="w-5 h-5 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
+                        </svg>
+                        {isUploading ? "Uploading..." : "Choose Image"}
+                      </label>
+                      {uploadProgress && (
+                        <p className="text-xs text-green-600 mt-1">
+                          {uploadProgress}
+                        </p>
+                      )}
+                      {formData.profile_picture_url && !isUploading && (
+                        <p className="text-xs text-gray-500 mt-1">
+                          ✓ Image uploaded
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -181,6 +266,44 @@ export function Profile() {
                     placeholder="e.g., Photography, Music, Sports"
                     className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
                   />
+                </div>
+
+                {/* Yearbook Quote - One-time edit */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Yearbook Quote
+                    {user?.yearbook_quote && (
+                      <span className="ml-2 text-xs text-amber-600">
+                        ⚠️ Cannot be changed once set
+                      </span>
+                    )}
+                  </label>
+                  {user?.yearbook_quote ? (
+                    <div className="mt-1 p-3 bg-gray-50 border border-gray-300 rounded-lg">
+                      <p className="text-gray-700 italic">
+                        "{user.yearbook_quote}"
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Your yearbook quote is permanent and cannot be edited.
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      <input
+                        type="text"
+                        name="yearbook_quote"
+                        value={formData.yearbook_quote}
+                        onChange={handleChange}
+                        placeholder="Your memorable yearbook quote..."
+                        maxLength={300}
+                        className="mt-1 w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        ⚠️ Choose carefully! This can only be set once and cannot be
+                        changed later.
+                      </p>
+                    </>
+                  )}
                 </div>
 
                 <div>
@@ -229,6 +352,15 @@ export function Profile() {
                 </div>
 
                 {user.bio && <p className="text-gray-700">{user.bio}</p>}
+
+                {user.yearbook_quote && (
+                  <div className="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded">
+                    <p className="text-gray-700 italic text-lg">
+                      "{user.yearbook_quote}"
+                    </p>
+                    <p className="text-xs text-gray-500 mt-2">Yearbook Quote</p>
+                  </div>
+                )}
 
                 <div className="flex flex-wrap gap-4 text-sm">
                   <div className="flex items-center text-gray-600">

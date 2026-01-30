@@ -10,6 +10,7 @@ export function Register() {
     fullName: "",
     university: "",
     graduationYear: new Date().getFullYear() + 1,
+    yearbookQuote: "",
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -48,6 +49,7 @@ export function Register() {
         formData.fullName,
         formData.university,
         formData.graduationYear,
+        formData.yearbookQuote || undefined,
       );
       navigate("/login", {
         state: { message: "Registration successful! Please log in." },
@@ -164,6 +166,28 @@ export function Register() {
                 onChange={handleChange}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
+            </div>
+
+            <div>
+              <label
+                htmlFor="yearbookQuote"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Yearbook Quote <span className="text-gray-400">(Optional)</span>
+              </label>
+              <input
+                id="yearbookQuote"
+                name="yearbookQuote"
+                type="text"
+                value={formData.yearbookQuote}
+                onChange={handleChange}
+                maxLength={300}
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="Your memorable quote (can only be set once)"
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                ⚠️ Choose carefully! This can only be set once and cannot be changed later.
+              </p>
             </div>
 
             <div>

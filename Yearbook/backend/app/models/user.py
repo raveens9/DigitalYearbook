@@ -19,6 +19,7 @@ class User(Base):
     interests: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     socials: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
     profile_picture_url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    yearbook_quote: Mapped[Optional[str]] = mapped_column(String(300), nullable=True)
     
     # Existing active status (e.g. for email verification)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)

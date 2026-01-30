@@ -26,8 +26,9 @@ export const authApi = {
     fullName: string,
     university: string,
     graduationYear: number,
+    yearbookQuote?: string,
   ) =>
-    apiClient.register(email, password, fullName, university, graduationYear),
+    apiClient.register(email, password, fullName, university, graduationYear, yearbookQuote),
   logout: () => apiClient.logout(),
   getMe: () => apiClient.request<User>("/api/v1/auth/me"),
 };
@@ -154,4 +155,40 @@ export const reportsApi = {
       method: "POST",
       body: data,
     }),
+};
+
+// Upload endpoints
+export const uploadApi = {
+  uploadImage: async (
+    file: File,
+    imageType: "profile_picture" | "post_image" | "post_attachment",
+    postId?: number,
+  ) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("image_type", imageType);
+    if (postId) formData.append("post_id", postId.toString());
+
+    const token = localStorage.getItem("access_token");
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+    const response = await fetch(
+      `${API_URL}/api/v1/image`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      },
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || "Upload failed");
+    }
+
+    return response.json();
+  },
+  deleteImage: (imageId: number) =>
+    apiClient.request(`/api/v1/image/${imageId}`, { method: "DELETE" }),
 };
