@@ -119,6 +119,15 @@ export function UserProfile() {
 
               {user.bio && <p className="text-gray-700">{user.bio}</p>}
 
+              {user.yearbook_quote && (
+                <div className="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded">
+                  <p className="text-gray-700 italic text-lg">
+                    "{user.yearbook_quote}"
+                  </p>
+                  <p className="text-xs text-gray-500 mt-2">Yearbook Quote</p>
+                </div>
+              )}
+
               <div className="flex flex-wrap gap-4 text-sm">
                 <div className="flex items-center text-gray-600">
                   <span className="mr-1">🎓</span>

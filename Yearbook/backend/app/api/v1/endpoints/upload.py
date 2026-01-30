@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Depends, UploadFile, File, Form, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from app.core.deps import get_db, get_current_user
+from app.core.deps import get_db, get_current_user_optional, get_current_user
 from app.models.user import User
 from app.models.image import Image, ImageType
 from app.services.storage import storage_service
 from app.schemas.image import ImageResponse
 from typing import Optional
+import uuid
 
 router = APIRouter()
 
@@ -20,7 +21,7 @@ async def upload_image(
     file: UploadFile = File(...),
     image_type: str = Form(...),
     post_id: Optional[int] = Form(None),
-    current_user: User = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_current_user_optional),
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -57,8 +58,9 @@ async def upload_image(
         )
     
     # Generate upload path
+    user_id = current_user.id if current_user else 0
     gcs_path = storage_service.generate_upload_path(
-        user_id=current_user.id,
+        user_id=user_id,
         filename=file.filename or "image",
         image_type=image_type
     )
@@ -74,29 +76,44 @@ async def upload_image(
             make_public=True
         )
         
-        # Save to database
-        image = Image(
-            user_id=current_user.id,
-            image_type=image_type,
-            gcs_bucket=storage_service.bucket_name,
-            gcs_path=gcs_path,
-            public_url=public_url,
-            filename=file.filename or "image",
-            content_type=file.content_type,
-            size_bytes=len(file_content),
-            post_id=post_id
-        )
-        
-        db.add(image)
-        await db.commit()
-        await db.refresh(image)
-        
-        # Update user profile picture if this is a profile picture
-        if image_type == ImageType.PROFILE_PICTURE:
-            current_user.profile_picture_url = public_url
+        # Save to database only if user is authenticated
+        if current_user:
+            image = Image(
+                user_id=current_user.id,
+                image_type=image_type,
+                gcs_bucket=storage_service.bucket_name,
+                gcs_path=gcs_path,
+                public_url=public_url,
+                filename=file.filename or "image",
+                content_type=file.content_type,
+                size_bytes=len(file_content),
+                post_id=post_id
+            )
+            
+            db.add(image)
             await db.commit()
-        
-        return image
+            await db.refresh(image)
+            
+            # Update user profile picture if this is a profile picture
+            if image_type == ImageType.PROFILE_PICTURE:
+                current_user.profile_picture_url = public_url
+                await db.commit()
+            
+            return image
+        else:
+            # Return a simple response with the URL for non-authenticated uploads
+            from datetime import datetime, timezone
+            return {
+                "id": 0,
+                "user_id": 0,
+                "image_type": image_type,
+                "public_url": public_url,
+                "filename": file.filename or "image",
+                "content_type": file.content_type,
+                "size_bytes": len(file_content),
+                "post_id": post_id,
+                "created_at": datetime.now(timezone.utc)
+            }
         
     except Exception as e:
         raise HTTPException(

@@ -135,6 +135,7 @@ class APIClient {
     fullName: string,
     university: string,
     graduationYear: number,
+    yearbookQuote?: string,
   ): Promise<void> {
     await this.request("/api/v1/auth/register", {
       method: "POST",
@@ -144,6 +145,7 @@ class APIClient {
         full_name: fullName,
         university,
         graduation_year: graduationYear,
+        yearbook_quote: yearbookQuote || undefined,
       },
       requireAuth: false,
     });

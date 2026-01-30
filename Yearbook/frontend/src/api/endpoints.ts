@@ -26,8 +26,9 @@ export const authApi = {
     fullName: string,
     university: string,
     graduationYear: number,
+    yearbookQuote?: string,
   ) =>
-    apiClient.register(email, password, fullName, university, graduationYear),
+    apiClient.register(email, password, fullName, university, graduationYear, yearbookQuote),
   logout: () => apiClient.logout(),
   getMe: () => apiClient.request<User>("/api/v1/auth/me"),
 };
@@ -169,8 +170,9 @@ export const uploadApi = {
     if (postId) formData.append("post_id", postId.toString());
 
     const token = localStorage.getItem("access_token");
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
     const response = await fetch(
-      "https://digitalyearbook-production.up.railway.app/api/v1/image",
+      `${API_URL}/api/v1/image`,
       {
         method: "POST",
         headers: {

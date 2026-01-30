@@ -10,6 +10,7 @@ import { Profile } from "./pages/Profile";
 import { UserProfile } from "./pages/UserProfile";
 import { PostDetail } from "./pages/PostDetail";
 import { Search } from "./pages/Search";
+import { GraduationYear } from "./pages/GraduationYear";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/feed" element={<Feed />} />
             <Route path="/post/:postId" element={<PostDetail />} />
             <Route path="/user/:userId" element={<UserProfile />} />
+            <Route path="/graduation" element={<GraduationYear />} />
 
             {/* Protected routes */}
             <Route

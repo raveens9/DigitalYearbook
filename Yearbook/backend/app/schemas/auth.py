@@ -24,6 +24,7 @@ class RegisterRequest(BaseModel):
     full_name: str = Field(..., min_length=1, max_length=100)
     university: str = Field(..., min_length=1, max_length=200)
     graduation_year: int = Field(..., ge=1900, le=2100)
+    yearbook_quote: Optional[str] = Field(None, max_length=300)
 
 
 class RefreshTokenRequest(BaseModel):

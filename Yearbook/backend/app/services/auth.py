@@ -60,6 +60,7 @@ class AuthService:
             full_name=data.full_name,
             university=data.university,
             graduation_year=data.graduation_year,
+            yearbook_quote=data.yearbook_quote,
             # If university mail -> True. If Gmail -> False.
             is_approved=is_auto_approved
         )

@@ -162,6 +162,11 @@ export function Search() {
                         <p className="text-sm text-gray-500 truncate">
                           @{user.username}
                         </p>
+                        {user.yearbook_quote && (
+                          <p className="text-xs text-gray-600 italic mt-1 line-clamp-2">
+                            "{user.yearbook_quote}"
+                          </p>
+                        )}
                         <div className="flex items-center text-sm text-gray-600 mt-1">
                           <span className="truncate">{user.university}</span>
                           <span className="mx-2">•</span>

@@ -14,9 +14,7 @@ export function Welcome() {
         style={{
           backgroundImage: `url('${buildingImage}')`,
         }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/90 via-purple-900/85 to-indigo-800/90 dark:from-gray-900/95 dark:via-indigo-950/90 dark:to-gray-900/95 transition-colors duration-300"></div>
-      </div>
+      ></div>
 
       {/* Content */}
       <div className="relative z-10">

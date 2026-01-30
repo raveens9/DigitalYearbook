@@ -31,6 +31,12 @@ export function Navbar() {
                   Feed
                 </Link>
                 <Link
+                  to="/graduation"
+                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+                >
+                  Graduates
+                </Link>
+                <Link
                   to="/search"
                   className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >

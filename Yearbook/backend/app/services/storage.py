@@ -71,7 +71,7 @@ class CloudStorageService:
         if not self.bucket:
             raise ValueError("GCS bucket not configured. Please set GCS_BUCKET_NAME in config.")
         
-            make_public: Whether to make the file publicly accessible
+            make_public: Whether to make the file publicly accessible (ignored if uniform bucket-level access is enabled)
             
         Returns:
             Public URL of the uploaded file
@@ -79,8 +79,10 @@ class CloudStorageService:
         blob = self.bucket.blob(destination_path)
         blob.upload_from_file(file, content_type=content_type, rewind=True)
         
-        if make_public:
-            blob.make_public()
+        # Skip make_public() when uniform bucket-level access is enabled
+        # The bucket should be configured with appropriate IAM policies instead
+        # if make_public:
+        #     blob.make_public()
         
         return blob.public_url
 

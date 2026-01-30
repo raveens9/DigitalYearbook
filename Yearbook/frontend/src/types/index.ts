@@ -11,6 +11,7 @@ export interface User {
   interests?: string;
   socials?: Record<string, string>;
   profile_picture_url?: string;
+  yearbook_quote?: string;
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -27,6 +28,7 @@ export interface UserPublic {
   interests?: string;
   socials?: Record<string, string>;
   profile_picture_url?: string;
+  yearbook_quote?: string;
   created_at: string;
 }
 
@@ -38,6 +40,7 @@ export interface UserSearchResult {
   graduation_year: number;
   faculty?: string;
   profile_picture_url?: string;
+  yearbook_quote?: string;
 }
 
 export interface UserUpdate {
@@ -48,6 +51,7 @@ export interface UserUpdate {
   interests?: string;
   socials?: Record<string, string>;
   profile_picture_url?: string;
+  yearbook_quote?: string;
 }
 
 // Auth types
@@ -68,6 +72,7 @@ export interface RegisterRequest {
   full_name: string;
   university: string;
   graduation_year: number;
+  yearbook_quote?: string;
 }
 
 // Post types
