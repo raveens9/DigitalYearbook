@@ -64,8 +64,8 @@ class UserService:
         offset: int = 0,
     ) -> Tuple[List[User], int]:
         """Search users by name, department, or graduation year."""
-        stmt = select(User).where(User.is_active == True)
-        count_stmt = select(func.count(User.id)).where(User.is_active == True)
+        stmt = select(User).where(User.is_active == True, User.is_approved == True)
+        count_stmt = select(func.count(User.id)).where(User.is_active == True, User.is_approved == True)
         
         if query:
             search_filter = or_(

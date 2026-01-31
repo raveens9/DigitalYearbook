@@ -68,7 +68,7 @@ export function Welcome() {
           </div>
 
           {/* Features Grid */}
-          <div className="grid md:grid-cols-3 gap-8 mt-20">
+          <div className="grid md:grid-cols-2 gap-8 mt-20">
             <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 border border-white/20 dark:border-gray-700">
               <div className="text-4xl mb-4">🎓</div>
               <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
@@ -80,7 +80,7 @@ export function Welcome() {
               </p>
             </div>
 
-            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 border border-white/20 dark:border-gray-700">
+            {/* <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 border border-white/20 dark:border-gray-700">
               <div className="text-4xl mb-4">📸</div>
               <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
                 Share Memories
@@ -89,7 +89,7 @@ export function Welcome() {
                 Post photos, updates, and memorable moments from your university
                 life.
               </p>
-            </div>
+            </div> */}
 
             <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 border border-white/20 dark:border-gray-700">
               <div className="text-4xl mb-4">🔍</div>
@@ -110,12 +110,14 @@ export function Welcome() {
             </h2>
             <div className="grid md:grid-cols-2 gap-8">
               <div className="p-6">
-                <div className="text-5xl font-bold text-white mb-2">600+</div>
-                <div className="text-gray-200 font-medium">Active Students</div>
+                <div className="text-5xl font-bold text-black mb-2">600+</div>
+                <div className="text-black-200 font-medium">
+                  Active Students
+                </div>
               </div>
               <div className="p-6">
-                <div className="text-5xl font-bold text-white mb-2">4</div>
-                <div className="text-gray-200 font-medium">Faculties</div>
+                <div className="text-5xl font-bold text-black mb-2">4</div>
+                <div className="text-black-500 font-medium">Faculties</div>
               </div>
             </div>
           </div>
