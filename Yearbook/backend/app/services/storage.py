@@ -1,3 +1,5 @@
+import json
+from google.oauth2 import service_account
 import os
 import uuid
 import json
@@ -16,7 +18,7 @@ class CloudStorageService:
             # Use hardcoded JSON credentials
             # Clean up the JSON string (remove extra whitespace, handle multiline)
             credentials_json = settings.GCS_CREDENTIALS_JSON.strip()
-            
+
             # If the JSON has unescaped newlines in the private key, escape them
             # This handles cases where the JSON is pasted directly
             try:
@@ -25,7 +27,7 @@ class CloudStorageService:
                 # Try to fix common issues with newlines in private_key
                 credentials_json = credentials_json.replace('\n', '\\n')
                 credentials_info = json.loads(credentials_json)
-            
+
             credentials = service_account.Credentials.from_service_account_info(
                 credentials_info
             )
@@ -45,9 +47,9 @@ class CloudStorageService:
         else:
             # Use default credentials (for local dev with gcloud auth)
             self.client = storage.Client(project=settings.GCS_PROJECT_ID)
-        
+
         self.bucket_name = settings.GCS_BUCKET_NAME
-        
+
         # Only initialize bucket if bucket name is provided
         if self.bucket_name:
             self.bucket = self.client.bucket(self.bucket_name)
@@ -63,36 +65,36 @@ class CloudStorageService:
     ) -> str:
         """
         Upload a file to Google Cloud Storage.
-        
+
         Args:
             file: File-like object to upload
             destination_path: Path in the bucket (e.g., 'images/user_123/profile.jpg')
             content_type: MIME type of the file
         if not self.bucket:
             raise ValueError("GCS bucket not configured. Please set GCS_BUCKET_NAME in config.")
-        
+
             make_public: Whether to make the file publicly accessible (ignored if uniform bucket-level access is enabled)
-            
+
         Returns:
             Public URL of the uploaded file
         """
         blob = self.bucket.blob(destination_path)
         blob.upload_from_file(file, content_type=content_type, rewind=True)
-        
+
         # Skip make_public() when uniform bucket-level access is enabled
         # The bucket should be configured with appropriate IAM policies instead
         # if make_public:
         #     blob.make_public()
-        
+
         return blob.public_url
 
     def delete_file(self, file_path: str) -> bool:
         """
         Delete a file from Google Cloud Storage.
-        
+
         Args:
             file_path: Path of the file in the bucket
-            
+
         Returns:
             True if successful, False otherwise
         """
@@ -111,11 +113,11 @@ class CloudStorageService:
     ) -> str:
         """
         Generate a signed URL for private file access.
-        
+
         Args:
             file_path: Path of the file in the bucket
             expiration: How long the URL should be valid
-            
+
         Returns:
             Signed URL
         """
@@ -131,12 +133,12 @@ class CloudStorageService:
     ) -> str:
         """
         Generate a unique path for file upload.
-        
+
         Args:
             user_id: ID of the user uploading the file
             filename: Original filename
             image_type: Type of image (profile_picture, post_image, etc.)
-            
+
         Returns:
             Unique path for the file
         """
@@ -144,13 +146,13 @@ class CloudStorageService:
         ext = os.path.splitext(filename)[1]
         if not ext:
             ext = '.jpg'
-        
+
         # Generate unique filename
         unique_filename = f"{uuid.uuid4()}{ext}"
-        
+
         # Create path: images/{image_type}/user_{user_id}/{unique_filename}
         path = f"images/{image_type}/user_{user_id}/{unique_filename}"
-        
+
         return path
 
 
