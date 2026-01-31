@@ -25,6 +25,11 @@ export function Post({
   const [reportReason, setReportReason] = useState("");
   const [currentPost, setCurrentPost] = useState(post);
 
+  // [YOUR CONTRIBUTION] Translation State
+  const [translatedText, setTranslatedText] = useState<string | null>(null);
+  const [translationLang, setTranslationLang] = useState<string>("");
+  const [isTranslating, setIsTranslating] = useState(false);
+
   const isOwner = user?.id === post.author.id;
 
   const handleLike = async () => {
@@ -89,6 +94,44 @@ export function Post({
     }
   };
 
+  // [YOUR CONTRIBUTION] Translation Function
+  const handleTranslate = async (lang: string) => {
+    // If user clicks the same language again, toggle it off
+    if (translationLang === lang && translatedText) {
+      setTranslatedText(null);
+      setTranslationLang("");
+      return;
+    }
+
+    setIsTranslating(true);
+    try {
+      // Calling your new backend API
+      const response = await fetch("http://localhost:8000/api/v1/tools/translate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: currentPost.content,
+          target_lang: lang,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Translation failed");
+      }
+
+      const data = await response.json();
+      setTranslatedText(data.translated);
+      setTranslationLang(lang);
+    } catch (error) {
+      console.error("Translation error:", error);
+      alert("Translation failed. Ensure the backend is running.");
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
@@ -115,14 +158,14 @@ export function Post({
               className="w-10 h-10 rounded-full object-cover"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
-              <span className="text-indigo-600 font-medium">
+            <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+              <span className="text-orange-600 font-medium">
                 {post.author.full_name.charAt(0).toUpperCase()}
               </span>
             </div>
           )}
           <div>
-            <p className="font-medium text-gray-900 hover:text-indigo-600">
+            <p className="font-medium text-gray-900 hover:text-orange-600">
               {post.author.full_name}
             </p>
             <p className="text-sm text-gray-500">@{post.author.username}</p>
@@ -157,7 +200,7 @@ export function Post({
           <textarea
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
-            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             rows={3}
           />
           <div className="flex justify-end space-x-2 mt-2">
@@ -169,7 +212,7 @@ export function Post({
             </button>
             <button
               onClick={handleEdit}
-              className="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700"
+              className="px-3 py-1 text-sm bg-orange-600 text-white rounded hover:bg-orange-700"
             >
               Save
             </button>
@@ -181,6 +224,57 @@ export function Post({
         >
           {currentPost.content}
         </p>
+      )}
+
+      {/* [YOUR CONTRIBUTION] Translation UI */}
+      {!isEditing && (
+        <div className="mb-4">
+          <div className="flex gap-3 text-xs text-gray-500 items-center">
+            <span>Translate to:</span>
+            <button
+              onClick={() => handleTranslate("si")}
+              className={`hover:text-orange-600 transition-colors ${
+                translationLang === "si" ? "font-bold text-orange-600" : ""
+              }`}
+              disabled={isTranslating}
+            >
+              Sinhala
+            </button>
+            <button
+              onClick={() => handleTranslate("ta")}
+              className={`hover:text-orange-600 transition-colors ${
+                translationLang === "ta" ? "font-bold text-orange-600" : ""
+              }`}
+              disabled={isTranslating}
+            >
+              Tamil
+            </button>
+            <button
+              onClick={() => handleTranslate("en")}
+              className={`hover:text-orange-600 transition-colors ${
+                translationLang === "en" ? "font-bold text-orange-600" : ""
+              }`}
+              disabled={isTranslating}
+            >
+              English
+            </button>
+            {isTranslating && <span className="animate-pulse">...</span>}
+          </div>
+
+          {translatedText && (
+            <div className="mt-2 p-3 bg-orange-50 rounded-md border border-orange-100 text-gray-700 text-sm">
+              <div className="text-xs font-semibold text-orange-500 mb-1">
+                Translated to{" "}
+                {translationLang === "si"
+                  ? "Sinhala"
+                  : translationLang === "ta"
+                  ? "Tamil"
+                  : "English"}
+              </div>
+              {translatedText}
+            </div>
+          )}
+        </div>
       )}
 
       {/* Image */}
@@ -209,7 +303,7 @@ export function Post({
           </button>
           <Link
             to={`/post/${post.id}`}
-            className="flex items-center space-x-1 text-gray-500 hover:text-indigo-600"
+            className="flex items-center space-x-1 text-gray-500 hover:text-orange-600"
           >
             <span>💬</span>
             <span>{currentPost.comments_count}</span>
@@ -234,7 +328,7 @@ export function Post({
               value={reportReason}
               onChange={(e) => setReportReason(e.target.value)}
               placeholder="Please describe why you're reporting this post..."
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               rows={4}
             />
             <div className="flex justify-end space-x-2 mt-4">

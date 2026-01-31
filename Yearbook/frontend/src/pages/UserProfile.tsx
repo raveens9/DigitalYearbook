@@ -4,6 +4,7 @@ import { Layout } from "../components/Layout";
 import { Post } from "../components/Post";
 import { usersApi, postsApi } from "../api/endpoints";
 import type { UserPublic, Post as PostType } from "../types";
+import buildingImage from "../assets/FOE-Mattegoda-1.jpg";
 
 export function UserProfile() {
   const { userId } = useParams<{ userId: string }>();
@@ -59,8 +60,14 @@ export function UserProfile() {
   if (isLoading) {
     return (
       <Layout>
+        <div
+          className="fixed inset-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none"
+          style={{
+            backgroundImage: `url('${buildingImage}')`,
+          }}
+        />
         <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
         </div>
       </Layout>
     );
@@ -69,6 +76,12 @@ export function UserProfile() {
   if (error || !user) {
     return (
       <Layout>
+        <div
+          className="fixed inset-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none"
+          style={{
+            backgroundImage: `url('${buildingImage}')`,
+          }}
+        />
         <div className="max-w-2xl mx-auto text-center py-12">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
             User Not Found
@@ -76,7 +89,7 @@ export function UserProfile() {
           <p className="text-gray-600 mb-6">
             {error || "The user you are looking for does not exist."}
           </p>
-          <Link to="/" className="text-indigo-600 hover:text-indigo-800">
+          <Link to="/" className="text-orange-600 hover:text-orange-800">
             ← Back to Feed
           </Link>
         </div>
@@ -86,10 +99,16 @@ export function UserProfile() {
 
   return (
     <Layout>
+      <div
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none"
+        style={{
+          backgroundImage: `url('${buildingImage}')`,
+        }}
+      />
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow overflow-hidden mb-6">
+        <div className="bg-white/95 rounded-lg shadow overflow-hidden mb-6">
           {/* Header */}
-          <div className="bg-gradient-to-r from-indigo-500 to-purple-600 h-32"></div>
+          <div className="bg-gradient-to-r from-orange-500 to-orange-600 h-32"></div>
 
           {/* Profile Info */}
           <div className="relative px-6 pb-6">
@@ -101,8 +120,8 @@ export function UserProfile() {
                   className="w-32 h-32 rounded-full border-4 border-white object-cover"
                 />
               ) : (
-                <div className="w-32 h-32 rounded-full border-4 border-white bg-indigo-100 flex items-center justify-center">
-                  <span className="text-4xl text-indigo-600 font-bold">
+                <div className="w-32 h-32 rounded-full border-4 border-white bg-orange-100 flex items-center justify-center">
+                  <span className="text-4xl text-orange-600 font-bold">
                     {user.full_name.charAt(0).toUpperCase()}
                   </span>
                 </div>
@@ -119,21 +138,32 @@ export function UserProfile() {
 
               {user.bio && <p className="text-gray-700">{user.bio}</p>}
 
+              {user.yearbook_quote && (
+                <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded">
+                  <p className="text-gray-700 italic text-lg">
+                    "{user.yearbook_quote}"
+                  </p>
+                  <p className="text-xs text-gray-500 mt-2">Yearbook Quote</p>
+                </div>
+              )}
+
               <div className="flex flex-wrap gap-4 text-sm">
                 <div className="flex items-center text-gray-600">
                   <span className="mr-1">🎓</span>
-                  {user.university}
+                  {user.department}
                 </div>
                 <div className="flex items-center text-gray-600">
                   <span className="mr-1">📅</span>
-                  Class of {user.graduation_year}
+                  {user.batch}
+                  {user.batch === 1
+                    ? "st"
+                    : user.batch === 2
+                      ? "nd"
+                      : user.batch === 3
+                        ? "rd"
+                        : "th"}{" "}
+                  Batch
                 </div>
-                {user.faculty && (
-                  <div className="flex items-center text-gray-600">
-                    <span className="mr-1">🏛️</span>
-                    {user.faculty}
-                  </div>
-                )}
               </div>
 
               {user.interests && (
@@ -159,7 +189,7 @@ export function UserProfile() {
                             href={url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-indigo-600 hover:text-indigo-800 capitalize"
+                            className="text-orange-600 hover:text-orange-800 capitalize"
                           >
                             {platform}
                           </a>
@@ -179,7 +209,7 @@ export function UserProfile() {
           </h2>
 
           {posts.length === 0 ? (
-            <div className="bg-white rounded-lg shadow p-6 text-center">
+            <div className="bg-white/95 rounded-lg shadow p-6 text-center">
               <p className="text-gray-500">No posts yet.</p>
             </div>
           ) : (
@@ -192,7 +222,7 @@ export function UserProfile() {
                 <div className="flex justify-center py-6">
                   <button
                     onClick={loadMorePosts}
-                    className="px-4 py-2 text-indigo-600 hover:text-indigo-800 font-medium"
+                    className="px-4 py-2 text-orange-600 hover:text-orange-800 font-medium"
                   >
                     Load more
                   </button>

@@ -44,14 +44,25 @@ class AuthService:
             username = f"{username_base}{counter}"
             counter += 1
 
+        # [YOUR LOGIC] Hybrid Approval System
+        # Check if it is a University Email (@sjp.ac.lk or @foe.sjp.ac.lk)
+        email_domain = data.email.lower().split("@")[1]
+        is_auto_approved = False
+
+        if "sjp.ac.lk" in email_domain:
+            is_auto_approved = True
+        
         # Create user
         user = User(
             email=data.email,
             username=username,
             password_hash=get_password_hash(data.password),
             full_name=data.full_name,
-            university=data.university,
-            graduation_year=data.graduation_year,
+            department=data.department,
+            batch=data.batch,
+            yearbook_quote=data.yearbook_quote,
+            # If university mail -> True. If Gmail -> False.
+            is_approved=is_auto_approved
         )
         
         self.db.add(user)

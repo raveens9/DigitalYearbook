@@ -3,17 +3,25 @@ import { Link } from "react-router-dom";
 import { Layout } from "../components/Layout";
 import { searchApi } from "../api/endpoints";
 import type { UserSearchResult } from "../types";
+import buildingImage from "../assets/FOE-Mattegoda-1.jpg";
 
 export function Search() {
   const [query, setQuery] = useState("");
   const [department, setDepartment] = useState("");
-  const [graduationYear, setGraduationYear] = useState("");
+  const [batch, setBatch] = useState("");
   const [results, setResults] = useState<UserSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
   const limit = 20;
+
+  const departments = [
+    "Computer Engineering",
+    "Electronic and Electrical Engineering",
+    "Mechanical Engineering",
+    "Civil Engineering",
+  ];
 
   const handleSearch = async (e?: React.FormEvent, reset = true) => {
     e?.preventDefault();
@@ -26,7 +34,7 @@ export function Search() {
       const response = await searchApi.students({
         q: query || undefined,
         department: department || undefined,
-        graduation_year: graduationYear ? parseInt(graduationYear) : undefined,
+        batch: batch ? parseInt(batch) : undefined,
         limit,
         offset: currentOffset,
       });
@@ -52,6 +60,12 @@ export function Search() {
 
   return (
     <Layout>
+      <div
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none"
+        style={{
+          backgroundImage: `url('${buildingImage}')`,
+        }}
+      />
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">
           Search Students
@@ -72,7 +86,7 @@ export function Search() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search by name..."
-                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               />
             </div>
 
@@ -80,28 +94,44 @@ export function Search() {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Department
               </label>
-              <input
-                type="text"
+              <select
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
-                placeholder="e.g., Computer Science"
-                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              />
+                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              >
+                <option value="">All Departments</option>
+                {departments.map((dept) => (
+                  <option key={dept} value={dept}>
+                    {dept}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Graduation Year
+                Batch
               </label>
-              <input
-                type="number"
-                value={graduationYear}
-                onChange={(e) => setGraduationYear(e.target.value)}
-                placeholder="e.g., 2025"
-                min="1900"
-                max="2100"
-                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              />
+              <select
+                value={batch}
+                onChange={(e) => setBatch(e.target.value)}
+                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              >
+                <option value="">All Batches</option>
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((batchNum) => (
+                  <option key={batchNum} value={batchNum}>
+                    {batchNum}
+                    {batchNum === 1
+                      ? "st"
+                      : batchNum === 2
+                        ? "nd"
+                        : batchNum === 3
+                          ? "rd"
+                          : "th"}{" "}
+                    Batch
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -109,7 +139,7 @@ export function Search() {
             <button
               type="submit"
               disabled={isLoading}
-              className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+              className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-200"
             >
               {isLoading ? "Searching..." : "Search"}
             </button>
@@ -123,8 +153,12 @@ export function Search() {
               {total} student{total !== 1 ? "s" : ""} found
             </p>
 
-            {results.length === 0 ? (
-              <div className="bg-white rounded-lg shadow p-6 text-center">
+            {isLoading && results.length === 0 ? (
+              <div className="bg-white/95 rounded-lg shadow p-6 text-center">
+                <p className="text-gray-500">Searching...</p>
+              </div>
+            ) : results.length === 0 ? (
+              <div className="bg-white/95 rounded-lg shadow p-6 text-center">
                 <p className="text-gray-500">
                   No students found matching your criteria.
                 </p>
@@ -136,7 +170,7 @@ export function Search() {
                     <Link
                       key={user.id}
                       to={`/user/${user.id}`}
-                      className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow flex items-center space-x-4"
+                      className="bg-white/95 rounded-lg shadow p-4 hover:shadow-md transition-shadow flex items-center space-x-4"
                     >
                       {user.profile_picture_url ? (
                         <img
@@ -145,8 +179,8 @@ export function Search() {
                           className="w-16 h-16 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center">
-                          <span className="text-2xl text-indigo-600 font-bold">
+                        <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center">
+                          <span className="text-2xl text-orange-600 font-bold">
                             {user.full_name.charAt(0).toUpperCase()}
                           </span>
                         </div>
@@ -158,10 +192,25 @@ export function Search() {
                         <p className="text-sm text-gray-500 truncate">
                           @{user.username}
                         </p>
+                        {user.yearbook_quote && (
+                          <p className="text-xs text-gray-600 italic mt-1 line-clamp-2">
+                            "{user.yearbook_quote}"
+                          </p>
+                        )}
                         <div className="flex items-center text-sm text-gray-600 mt-1">
-                          <span className="truncate">{user.university}</span>
+                          <span className="truncate">{user.department}</span>
                           <span className="mx-2">•</span>
-                          <span>Class of {user.graduation_year}</span>
+                          <span>
+                            {user.batch}
+                            {user.batch === 1
+                              ? "st"
+                              : user.batch === 2
+                                ? "nd"
+                                : user.batch === 3
+                                  ? "rd"
+                                  : "th"}{" "}
+                            Batch
+                          </span>
                         </div>
                         {user.faculty && (
                           <p className="text-sm text-gray-500 truncate">
@@ -178,7 +227,7 @@ export function Search() {
                     <button
                       onClick={handleLoadMore}
                       disabled={isLoading}
-                      className="px-4 py-2 text-indigo-600 hover:text-indigo-800 font-medium"
+                      className="px-4 py-2 text-orange-600 hover:text-orange-800 font-medium"
                     >
                       {isLoading ? "Loading..." : "Load more"}
                     </button>

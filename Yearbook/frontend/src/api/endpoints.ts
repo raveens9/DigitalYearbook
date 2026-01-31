@@ -24,10 +24,18 @@ export const authApi = {
     email: string,
     password: string,
     fullName: string,
-    university: string,
-    graduationYear: number,
+    department: string,
+    batch: number,
+    yearbookQuote?: string,
   ) =>
-    apiClient.register(email, password, fullName, university, graduationYear),
+    apiClient.register(
+      email,
+      password,
+      fullName,
+      department,
+      batch,
+      yearbookQuote,
+    ),
   logout: () => apiClient.logout(),
   getMe: () => apiClient.request<User>("/api/v1/auth/me"),
 };
@@ -48,15 +56,14 @@ export const usersApi = {
   search: (params: {
     q?: string;
     department?: string;
-    graduation_year?: number;
+    batch?: number;
     limit?: number;
     offset?: number;
   }) => {
     const searchParams = new URLSearchParams();
     if (params.q) searchParams.append("q", params.q);
     if (params.department) searchParams.append("department", params.department);
-    if (params.graduation_year)
-      searchParams.append("graduation_year", params.graduation_year.toString());
+    if (params.batch) searchParams.append("batch", params.batch.toString());
     if (params.limit) searchParams.append("limit", params.limit.toString());
     if (params.offset) searchParams.append("offset", params.offset.toString());
     return apiClient.request<SearchResponse<UserSearchResult>>(
@@ -130,15 +137,14 @@ export const searchApi = {
   students: (params: {
     q?: string;
     department?: string;
-    graduation_year?: number;
+    batch?: number;
     limit?: number;
     offset?: number;
   }) => {
     const searchParams = new URLSearchParams();
     if (params.q) searchParams.append("q", params.q);
     if (params.department) searchParams.append("department", params.department);
-    if (params.graduation_year)
-      searchParams.append("graduation_year", params.graduation_year.toString());
+    if (params.batch) searchParams.append("batch", params.batch.toString());
     if (params.limit) searchParams.append("limit", params.limit.toString());
     if (params.offset) searchParams.append("offset", params.offset.toString());
     return apiClient.request<SearchResponse<UserSearchResult>>(
@@ -154,4 +160,37 @@ export const reportsApi = {
       method: "POST",
       body: data,
     }),
+};
+
+// Upload endpoints
+export const uploadApi = {
+  uploadImage: async (
+    file: File,
+    imageType: "profile_picture" | "post_image" | "post_attachment",
+    postId?: number,
+  ) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("image_type", imageType);
+    if (postId) formData.append("post_id", postId.toString());
+
+    const token = localStorage.getItem("access_token");
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+    const response = await fetch(`${API_URL}/api/v1/image`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || "Upload failed");
+    }
+
+    return response.json();
+  },
+  deleteImage: (imageId: number) =>
+    apiClient.request(`/api/v1/image/${imageId}`, { method: "DELETE" }),
 };

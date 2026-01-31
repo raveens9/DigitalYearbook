@@ -41,6 +41,12 @@ class UserService:
             if existing and existing.id != user.id:
                 raise ValueError("Username already taken")
         
+        # Prevent editing yearbook_quote if it's already set
+        if "yearbook_quote" in update_data:
+            if user.yearbook_quote is not None and user.yearbook_quote != "":
+                # Remove yearbook_quote from update_data if it's already set
+                update_data.pop("yearbook_quote")
+        
         for field, value in update_data.items():
             setattr(user, field, value)
         
@@ -53,13 +59,13 @@ class UserService:
         self,
         query: Optional[str] = None,
         department: Optional[str] = None,
-        graduation_year: Optional[int] = None,
+        batch: Optional[int] = None,
         limit: int = 20,
         offset: int = 0,
     ) -> Tuple[List[User], int]:
         """Search users by name, department, or graduation year."""
-        stmt = select(User).where(User.is_active == True)
-        count_stmt = select(func.count(User.id)).where(User.is_active == True)
+        stmt = select(User).where(User.is_active == True, User.is_approved == True)
+        count_stmt = select(func.count(User.id)).where(User.is_active == True, User.is_approved == True)
         
         if query:
             search_filter = or_(
@@ -70,12 +76,12 @@ class UserService:
             count_stmt = count_stmt.where(search_filter)
         
         if department:
-            stmt = stmt.where(User.faculty.ilike(f"%{department}%"))
-            count_stmt = count_stmt.where(User.faculty.ilike(f"%{department}%"))
+            stmt = stmt.where(User.department.ilike(f"%{department}%"))
+            count_stmt = count_stmt.where(User.department.ilike(f"%{department}%"))
         
-        if graduation_year:
-            stmt = stmt.where(User.graduation_year == graduation_year)
-            count_stmt = count_stmt.where(User.graduation_year == graduation_year)
+        if batch:
+            stmt = stmt.where(User.batch == batch)
+            count_stmt = count_stmt.where(User.batch == batch)
         
         # Get total count
         count_result = await self.db.execute(count_stmt)

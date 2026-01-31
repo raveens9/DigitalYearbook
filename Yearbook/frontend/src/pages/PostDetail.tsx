@@ -95,8 +95,14 @@ export function PostDetail() {
   if (isLoading) {
     return (
       <Layout>
+        <div
+          className="fixed inset-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none"
+          style={{
+            backgroundImage: `url('${buildingImage}')`,
+          }}
+        />
         <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
         </div>
       </Layout>
     );
@@ -105,6 +111,12 @@ export function PostDetail() {
   if (error || !post) {
     return (
       <Layout>
+        <div
+          className="fixed inset-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none"
+          style={{
+            backgroundImage: `url('${buildingImage}')`,
+          }}
+        />
         <div className="max-w-2xl mx-auto text-center py-12">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
             Post Not Found
@@ -112,7 +124,7 @@ export function PostDetail() {
           <p className="text-gray-600 mb-6">
             {error || "The post you are looking for does not exist."}
           </p>
-          <Link to="/" className="text-indigo-600 hover:text-indigo-800">
+          <Link to="/" className="text-orange-600 hover:text-orange-800">
             ← Back to Feed
           </Link>
         </div>
@@ -122,10 +134,16 @@ export function PostDetail() {
 
   return (
     <Layout>
+      <div
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none"
+        style={{
+          backgroundImage: `url('${buildingImage}')`,
+        }}
+      />
       <div className="max-w-2xl mx-auto">
         <Link
           to="/"
-          className="text-indigo-600 hover:text-indigo-800 mb-4 inline-block"
+          className="text-orange-600 hover:text-orange-800 mb-4 inline-block"
         >
           ← Back to Feed
         </Link>
@@ -147,14 +165,14 @@ export function PostDetail() {
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Write a comment..."
-                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
                 rows={2}
               />
               <div className="flex justify-end mt-2">
                 <button
                   type="submit"
                   disabled={isCreatingComment || !newComment.trim()}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                  className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-200 disabled:cursor-not-allowed text-sm"
                 >
                   {isCreatingComment ? "Posting..." : "Comment"}
                 </button>
@@ -182,7 +200,7 @@ export function PostDetail() {
                   <div className="flex justify-center pt-4">
                     <button
                       onClick={loadMoreComments}
-                      className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                      className="text-orange-600 hover:text-orange-800 text-sm font-medium"
                     >
                       Load more comments
                     </button>

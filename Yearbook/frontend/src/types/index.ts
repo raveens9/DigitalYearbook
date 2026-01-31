@@ -4,13 +4,14 @@ export interface User {
   email: string;
   username: string;
   full_name: string;
-  university: string;
+  department: string;
   graduation_year: number;
   bio?: string;
   faculty?: string;
   interests?: string;
   socials?: Record<string, string>;
   profile_picture_url?: string;
+  yearbook_quote?: string;
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -20,13 +21,14 @@ export interface UserPublic {
   id: number;
   username: string;
   full_name: string;
-  university: string;
+  department: string;
   graduation_year: number;
   bio?: string;
   faculty?: string;
   interests?: string;
   socials?: Record<string, string>;
   profile_picture_url?: string;
+  yearbook_quote?: string;
   created_at: string;
 }
 
@@ -34,10 +36,11 @@ export interface UserSearchResult {
   id: number;
   username: string;
   full_name: string;
-  university: string;
-  graduation_year: number;
+  department: string;
+  batch: number;
   faculty?: string;
   profile_picture_url?: string;
+  yearbook_quote?: string;
 }
 
 export interface UserUpdate {
@@ -48,6 +51,7 @@ export interface UserUpdate {
   interests?: string;
   socials?: Record<string, string>;
   profile_picture_url?: string;
+  yearbook_quote?: string;
 }
 
 // Auth types
@@ -66,8 +70,9 @@ export interface RegisterRequest {
   email: string;
   password: string;
   full_name: string;
-  university: string;
-  graduation_year: number;
+  department: string;
+  batch: number;
+  yearbook_quote?: string;
 }
 
 // Post types

@@ -4,7 +4,6 @@ from sqlalchemy import String, Text, Integer, Boolean, DateTime, JSON, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 
-
 class User(Base):
     __tablename__ = "users"
 
@@ -13,14 +12,21 @@ class User(Base):
     username: Mapped[str] = mapped_column(String(50), unique=True, index=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     full_name: Mapped[str] = mapped_column(String(100), nullable=False)
-    university: Mapped[str] = mapped_column(String(200), nullable=False, index=True)
-    graduation_year: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
+    department: Mapped[str] = mapped_column(String(200), nullable=False, index=True)
+    batch: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
     bio: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     faculty: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     interests: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     socials: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
     profile_picture_url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    yearbook_quote: Mapped[Optional[str]] = mapped_column(String(300), nullable=True)
+    
+    # Existing active status (e.g. for email verification)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    
+    # [YOUR CONTRIBUTION] Admin Approval Switch (Default is FALSE so they are pending)
+    is_approved: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
